@@ -8,4 +8,4 @@ exports.router.post('/', client_1.createClient);
 exports.router.put('/:id', client_1.updateClient);
 exports.router.delete('/:id', client_1.delteClient);
 exports.router.get('/search', client_1.searchClient);
-exports.router.get('/:userId', client_1.getClients);
+exports.router.get('/:userId/:serviceId', client_1.getClients);

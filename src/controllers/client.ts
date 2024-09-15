@@ -7,19 +7,26 @@ export async function createClient(
   res: Response,
   next: NextFunction
 ) {
-  const { name, userId, contactInfo } = req.body;
+  const { name, userId, contactInfo, serviceId } = req.body;
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
     });
 
     if (!user) {
-      // res.status(404).json({ msg: 'User Not Found !' });
       return next(new ErrorHandler('User Not Found !', 404));
     }
 
+    const service = await prisma.service.findUnique({
+      where: { id: serviceId },
+    });
+
+    if (!service) {
+      return next(new ErrorHandler('Service Not Found !', 404));
+    }
+
     const newClient = await prisma.client.create({
-      data: { userId, name, contactInfo },
+      data: { userId, serviceId, name, contactInfo },
       select: {
         id: true,
         name: true,
@@ -140,20 +147,27 @@ export async function getClients(
   res: Response,
   next: NextFunction
 ) {
-  const { userId } = req.params;
+  const { userId, serviceId } = req.params;
 
   try {
     const user = await prisma.user.findUnique({
       where: { id: parseInt(userId) },
     });
 
+    const service = await prisma.service.findUnique({
+      where: { id: parseInt(serviceId) },
+    });
     if (!user) {
       return next(new ErrorHandler('User Not Exist Or Invalid User ID !', 404));
+    }
+    if (!service) {
+      return next(new ErrorHandler('Invalid Service ID !', 404));
     }
 
     const clients = await prisma.client.findMany({
       where: {
         userId: parseInt(userId),
+        serviceId: parseInt(serviceId),
       },
     });
 

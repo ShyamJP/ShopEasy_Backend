@@ -13,4 +13,4 @@ router.post('/', createClient);
 router.put('/:id', updateClient);
 router.delete('/:id', delteClient);
 router.get('/search', searchClient);
-router.get('/:userId', getClients);
+router.get('/:userId/:serviceId', getClients);

@@ -21,17 +21,22 @@ const db_1 = __importDefault(require("../db"));
 const error_1 = require("../helpers/error");
 function createClient(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { name, userId, contactInfo } = req.body;
+        const { name, userId, contactInfo, serviceId } = req.body;
         try {
             const user = yield db_1.default.user.findUnique({
                 where: { id: userId },
             });
             if (!user) {
-                // res.status(404).json({ msg: 'User Not Found !' });
                 return next(new error_1.ErrorHandler('User Not Found !', 404));
             }
+            const service = yield db_1.default.service.findUnique({
+                where: { id: serviceId },
+            });
+            if (!service) {
+                return next(new error_1.ErrorHandler('Service Not Found !', 404));
+            }
             const newClient = yield db_1.default.client.create({
-                data: { userId, name, contactInfo },
+                data: { userId, serviceId, name, contactInfo },
                 select: {
                     id: true,
                     name: true,
@@ -125,17 +130,25 @@ function searchClient(req, res, next) {
 }
 function getClients(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { userId } = req.params;
+        const { userId, serviceId } = req.params;
+        console.log(userId, serviceId);
         try {
             const user = yield db_1.default.user.findUnique({
                 where: { id: parseInt(userId) },
             });
+            const service = yield db_1.default.service.findUnique({
+                where: { id: parseInt(serviceId) },
+            });
             if (!user) {
                 return next(new error_1.ErrorHandler('User Not Exist Or Invalid User ID !', 404));
+            }
+            if (!service) {
+                return next(new error_1.ErrorHandler('Invalid Service ID !', 404));
             }
             const clients = yield db_1.default.client.findMany({
                 where: {
                     userId: parseInt(userId),
+                    serviceId: parseInt(serviceId),
                 },
             });
             res.status(200).json({ msg: 'Clients Data', data: clients });

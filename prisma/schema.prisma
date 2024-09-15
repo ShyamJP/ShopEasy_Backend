@@ -25,19 +25,6 @@ model User{
   clients Client[]
   services Service[]
 }
-
-model Client{
-  id Int @id @default(autoincrement())
-  userId Int
-  name String
-  contactInfo String?
-  createdAt DateTime @default(now())
-  user User @relation(fields: [userId] , references: [id] , onDelete: Cascade)
-  records DailyRecord[]
-
-  @@index([userId])
-}
-
 model Service{
   id Int @id @default(autoincrement())
   userId Int
@@ -47,8 +34,24 @@ model Service{
   createdAt DateTime @default(now())
   user User @relation(fields: [userId] , references: [id] , onDelete: Cascade)
   records DailyRecord[]
-
+  clients Client[]
+  
   @@index([userId])
+}
+model Client {
+  id          Int      @id @default(autoincrement())
+  userId      Int      // Foreign key referencing User
+  serviceId   Int      // Foreign key referencing Service
+  name        String
+  contactInfo String?
+  createdAt   DateTime @default(now())
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  service     Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  records     DailyRecord[]
+  
+  @@index([userId])
+  @@index([serviceId])
 }
 
 model DailyRecord{

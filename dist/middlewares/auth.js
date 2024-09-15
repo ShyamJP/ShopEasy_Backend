@@ -19,7 +19,7 @@ const error_1 = require("../helpers/error");
 const authmiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const authtoken = req.cookies.authorization;
     if (!authtoken || !authtoken.startsWith('Bearer ')) {
-        return res.status(403).json('Invalid Token !');
+        return res.status(401).json('Invalid Token !');
         // throw new ErrorHandler('Invalid Token !', 403);
     }
     const token = authtoken.split(' ')[1];
@@ -37,7 +37,7 @@ const authmiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
             },
         });
         if (!user) {
-            return res.status(403).json('Invalid Token !');
+            return res.status(401).json('Invalid Token !');
             // throw new ErrorHandler('User Not Found !', 404);
         }
         req.user = {
@@ -52,9 +52,9 @@ const authmiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     catch (err) {
         console.log(err);
         if (err instanceof jsonwebtoken_1.default.TokenExpiredError) {
-            next(new error_1.ErrorHandler('Token Expired', 403));
+            next(new error_1.ErrorHandler('Token Expired', 401));
         }
-        next(new error_1.ErrorHandler('Authentication Failed', 403));
+        next(new error_1.ErrorHandler('Authentication Failed', 401));
     }
 });
 exports.default = authmiddleware;
