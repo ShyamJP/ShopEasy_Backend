@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import {
   createClient,
-  delteClient,
+  deleteClient,
   getClients,
   searchClient,
   updateClient,
@@ -11,6 +11,6 @@ export const router = Router();
 
 router.post('/', createClient);
 router.put('/:id', updateClient);
-router.delete('/:id', delteClient);
+router.delete('/:id', deleteClient);
 router.get('/search', searchClient);
 router.get('/:userId/:serviceId', getClients);

@@ -7,7 +7,7 @@ export async function createClient(
   res: Response,
   next: NextFunction
 ) {
-  const { name, userId, contactInfo, serviceId } = req.body;
+  const { name, userId, contactInfo, serviceId, address } = req.body;
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -26,13 +26,14 @@ export async function createClient(
     }
 
     const newClient = await prisma.client.create({
-      data: { userId, serviceId, name, contactInfo },
+      data: { userId, serviceId, name, contactInfo, address },
       select: {
         id: true,
         name: true,
         contactInfo: true,
         user: true,
         createdAt: true,
+        address: true,
       },
     });
 
@@ -51,7 +52,7 @@ export async function updateClient(
   res: Response,
   next: NextFunction
 ) {
-  const { name, contactInfo } = req.body;
+  const { name, contactInfo, address } = req.body;
   const { id } = req.params;
   try {
     const client = await prisma.client.findUnique({
@@ -67,11 +68,13 @@ export async function updateClient(
       data: {
         name,
         contactInfo,
+        address,
       },
       select: {
         id: true,
         name: true,
         contactInfo: true,
+        address: true,
       },
     });
 
@@ -83,7 +86,7 @@ export async function updateClient(
   }
 }
 
-export async function delteClient(
+export async function deleteClient(
   req: Request,
   res: Response,
   next: NextFunction
@@ -132,6 +135,7 @@ export async function searchClient(
         OR: [
           { name: { contains: query, mode: 'insensitive' } },
           { contactInfo: { contains: query, mode: 'insensitive' } },
+          { address: { contains: query, mode: 'insensitive' } },
         ],
       },
     });
