@@ -119,6 +119,7 @@ export async function searchClient(
   next: NextFunction
 ) {
   const { query } = req.query;
+  const { userId, serviceId } = req.params;
 
   if (!query || typeof query !== 'string') {
     return next(
@@ -130,8 +131,23 @@ export async function searchClient(
   }
 
   try {
+    const user = await prisma.user.findUnique({
+      where: { id: parseInt(userId) },
+    });
+
+    const service = await prisma.service.findUnique({
+      where: { id: parseInt(serviceId) },
+    });
+    if (!user) {
+      return next(new ErrorHandler('User Not Exist Or Invalid User ID !', 404));
+    }
+    if (!service) {
+      return next(new ErrorHandler('Invalid Service ID !', 404));
+    }
     const clients = await prisma.client.findMany({
       where: {
+        userId: parseInt(userId),
+        serviceId: parseInt(serviceId),
         OR: [
           { name: { contains: query, mode: 'insensitive' } },
           { contactInfo: { contains: query, mode: 'insensitive' } },

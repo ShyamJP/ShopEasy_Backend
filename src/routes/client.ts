@@ -12,5 +12,5 @@ export const router = Router();
 router.post('/', createClient);
 router.put('/:id', updateClient);
 router.delete('/:id', deleteClient);
-router.get('/search', searchClient);
+router.get('/:userId/:serviceId/search', searchClient);
 router.get('/:userId/:serviceId', getClients);
