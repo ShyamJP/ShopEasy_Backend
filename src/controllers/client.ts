@@ -47,6 +47,51 @@ export async function createClient(
   }
 }
 
+export async function getClient(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const { userId, serviceId, id } = req.params;
+  console.log(userId, serviceId, id);
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: parseInt(userId) },
+    });
+
+    if (!user) {
+      return next(new ErrorHandler('UserId Not Found !', 400));
+    }
+
+    const service = await prisma.service.findUnique({
+      where: { id: parseInt(serviceId) },
+    });
+
+    if (!service) {
+      return next(new ErrorHandler('Service Not Found !', 400));
+    }
+
+    const getClient = await prisma.client.findUnique({
+      where: { id: parseInt(id) },
+      select: {
+        id: true,
+        name: true,
+        contactInfo: true,
+        address: true,
+        createdAt: true,
+        records: true,
+        userId: true,
+        serviceId: true,
+      },
+    });
+
+    res.status(200).json({ msg: 'Client Data', data: getClient });
+  } catch (error) {
+    return next(new ErrorHandler('Client: Internal Server Error!', 500));
+  }
+}
+
 export async function updateClient(
   req: Request,
   res: Response,

@@ -5,6 +5,7 @@ import {
   getClients,
   searchClient,
   updateClient,
+  getClient,
 } from '../controllers/client';
 
 export const router = Router();
@@ -14,3 +15,4 @@ router.put('/:id', updateClient);
 router.delete('/:id', deleteClient);
 router.get('/:userId/:serviceId/search', searchClient);
 router.get('/:userId/:serviceId', getClients);
+router.get('/:userId/:serviceId/:id', getClient);
