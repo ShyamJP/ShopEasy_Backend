@@ -5,10 +5,10 @@ import {
   getServices,
   updateService,
 } from '../controllers/service';
-
+import authmiddleware from '../middlewares/auth';
 export const router = Router();
 
-router.post('/', createService);
-router.put('/:id', updateService);
-router.delete('/:id', deleteService);
-router.get('/:id', getServices);
+router.post('/', authmiddleware, createService);
+router.put('/:id', authmiddleware, updateService);
+router.delete('/:id', authmiddleware, deleteService);
+router.get('/:id', authmiddleware, getServices);

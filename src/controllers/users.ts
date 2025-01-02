@@ -99,7 +99,11 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 export async function logOut(req: Request, res: Response) {
   res
     .status(200)
-    .clearCookie('authorization')
+    .clearCookie('authorization', {
+      httpOnly: true,
+      // secure: process.env.NODE_ENV === 'production', // Set secure flag only in production
+      sameSite: 'strict',
+    })
     .json({ msg: 'User Logged Out successfully !' });
 }
 

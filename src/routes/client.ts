@@ -7,6 +7,7 @@ import {
   updateClient,
   getClient,
 } from '../controllers/client';
+import authmiddleware from '../middlewares/auth';
 
 export const router = Router();
 

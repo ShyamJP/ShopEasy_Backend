@@ -3,7 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import { router } from './routes/index';
-import { handleError } from './helpers/error';
+import { errorMiddleware } from './helpers/error';
 dotenv.config();
 import path from 'path';
 
@@ -22,7 +22,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use('/', router);
-app.use(handleError);
+app.use(errorMiddleware);
 
 app.use('/avatar', express.static(avatarPath));
 

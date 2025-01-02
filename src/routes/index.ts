@@ -12,6 +12,6 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 router.use('/user', userRouter);
-router.use('/service', authmiddleware, serviceRouter);
+router.use('/service', serviceRouter);
 router.use('/client', authmiddleware, clientRouter);
 router.use('/record', authmiddleware, recordRouter);
