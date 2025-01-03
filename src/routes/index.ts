@@ -3,7 +3,7 @@ import { router as userRouter } from './user';
 import { router as serviceRouter } from './service';
 import { router as clientRouter } from './client';
 import { router as recordRouter } from './records';
-import authmiddleware from '../middlewares/auth';
+import authMiddleware from '../middlewares/auth';
 
 export const router = Router();
 
@@ -13,5 +13,5 @@ router.get('/', (req: Request, res: Response) => {
 
 router.use('/user', userRouter);
 router.use('/service', serviceRouter);
-router.use('/client', authmiddleware, clientRouter);
-router.use('/record', authmiddleware, recordRouter);
+router.use('/client', authMiddleware, clientRouter);
+router.use('/record', authMiddleware, recordRouter);

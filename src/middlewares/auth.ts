@@ -17,7 +17,7 @@ declare module 'express-serve-static-core' {
   }
 }
 
-const authmiddleware = async (
+const authMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -87,4 +87,4 @@ const authmiddleware = async (
   }
 };
 
-export default authmiddleware;
+export default authMiddleware;

@@ -6,12 +6,12 @@ import {
   updateUser,
   forgotPassword,
 } from '../controllers/users';
-import authmiddleware from '../middlewares/auth';
+import authMiddleware from '../middlewares/auth';
 
 export const router = Router();
 
 router.post('/register', register);
 router.post('/login', login);
 router.post('/logout', logOut);
-router.put('/update/:id', authmiddleware, updateUser);
-router.post('/forgotPass', authmiddleware, forgotPassword);
+router.put('/update/:id', authMiddleware, updateUser);
+router.post('/forgotPass', authMiddleware, forgotPassword);
