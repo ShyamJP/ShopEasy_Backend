@@ -52,12 +52,11 @@ export async function getClient(
   res: Response,
   next: NextFunction
 ) {
-  const { userId, serviceId, id } = req.params;
-  console.log(userId, serviceId, id);
+  const { id, serviceId, clientId } = req.params;
 
   try {
     const user = await prisma.user.findUnique({
-      where: { id: parseInt(userId) },
+      where: { id: parseInt(id) },
     });
 
     if (!user) {
@@ -73,7 +72,7 @@ export async function getClient(
     }
 
     const getClient = await prisma.client.findUnique({
-      where: { id: parseInt(id) },
+      where: { id: parseInt(clientId) },
       select: {
         id: true,
         name: true,
@@ -98,10 +97,10 @@ export async function updateClient(
   next: NextFunction
 ) {
   const { name, contactInfo, address } = req.body;
-  const { id } = req.params;
+  const { clientId } = req.params;
   try {
     const client = await prisma.client.findUnique({
-      where: { id: parseInt(id) },
+      where: { id: parseInt(clientId) },
     });
 
     if (!client) {
@@ -109,7 +108,7 @@ export async function updateClient(
     }
 
     const UpdatedClient = await prisma.client.update({
-      where: { id: parseInt(id) },
+      where: { id: parseInt(clientId) },
       data: {
         name,
         contactInfo,
@@ -136,10 +135,10 @@ export async function deleteClient(
   res: Response,
   next: NextFunction
 ) {
-  const { id } = req.params;
+  const { clientId } = req.params;
   try {
     const client = await prisma.client.findUnique({
-      where: { id: parseInt(id) },
+      where: { id: parseInt(clientId) },
     });
 
     if (!client) {
@@ -147,7 +146,7 @@ export async function deleteClient(
     }
 
     await prisma.client.delete({
-      where: { id: parseInt(id) },
+      where: { id: parseInt(clientId) },
     });
 
     res.status(200).json({ msg: 'Client is Deleted !' });
@@ -164,7 +163,7 @@ export async function searchClient(
   next: NextFunction
 ) {
   const { query } = req.query;
-  const { userId, serviceId } = req.params;
+  const { id, serviceId } = req.params;
 
   if (!query || typeof query !== 'string') {
     return next(
@@ -177,7 +176,7 @@ export async function searchClient(
 
   try {
     const user = await prisma.user.findUnique({
-      where: { id: parseInt(userId) },
+      where: { id: parseInt(id) },
     });
 
     const service = await prisma.service.findUnique({
@@ -191,7 +190,7 @@ export async function searchClient(
     }
     const clients = await prisma.client.findMany({
       where: {
-        userId: parseInt(userId),
+        userId: parseInt(id),
         serviceId: parseInt(serviceId),
         OR: [
           { name: { contains: query, mode: 'insensitive' } },
@@ -212,11 +211,11 @@ export async function getClients(
   res: Response,
   next: NextFunction
 ) {
-  const { userId, serviceId } = req.params;
+  const { id, serviceId } = req.params;
 
   try {
     const user = await prisma.user.findUnique({
-      where: { id: parseInt(userId) },
+      where: { id: parseInt(id) },
     });
 
     const service = await prisma.service.findUnique({
@@ -231,7 +230,7 @@ export async function getClients(
 
     const clients = await prisma.client.findMany({
       where: {
-        userId: parseInt(userId),
+        userId: parseInt(id),
         serviceId: parseInt(serviceId),
       },
     });

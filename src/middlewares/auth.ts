@@ -34,19 +34,19 @@ const authMiddleware = async (
   try {
     const decode = jwt.verify(token, JWT_SECRET) as JwtPayload;
     req.id = decode.id;
-    console.log('decode id' + decode.id);
+    // console.log('decode id' + decode.id);
     if (!decode.id) {
-      console.log('Invalid token payload');
+      // console.log('Invalid token payload');
       throw new ErrorHandler('Invalid token payload', 401);
     }
 
     // Get requested user ID from params or body
     const requestedUserId = parseInt(req.params.id);
-    console.log('RequestedUserId' + requestedUserId);
+    // console.log('RequestedUserId' + requestedUserId);
 
     // If a specific user ID is being requested, verify it matches the token
     if (requestedUserId && requestedUserId !== decode.id) {
-      console.log('User ID does not match');
+      // console.log('User ID does not match');
       throw new ErrorHandler(
         "Unauthorized: You cannot access other user's data",
         403
@@ -78,7 +78,7 @@ const authMiddleware = async (
     };
     next();
   } catch (err) {
-    console.log(err);
+    // console.log(err);
 
     if (err instanceof jwt.TokenExpiredError) {
       next(new ErrorHandler('Token Expired', 401));

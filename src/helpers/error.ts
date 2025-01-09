@@ -54,11 +54,11 @@ export const errorMiddleware = (
   err.message = err.message || 'Internal Server Error';
 
   // Log error for debugging (optional)
-  console.error('Error:', {
-    statusCode: err.statusCode,
-    message: err.message,
-    stack: err.stack,
-  });
+  // console.error('Error:', {
+  //   statusCode: err.statusCode,
+  //   message: err.message,
+  //   stack: err.stack,
+  // });
 
   return res.status(err.statusCode).json({
     success: false,
